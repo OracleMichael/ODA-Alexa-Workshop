@@ -2,7 +2,7 @@
 
 Updated: October 25th, 2019
 
-This part of the lab builds the ODA-side of the integration.
+This part of the lab builds the Digital Assistant side of the integration.
 
 ***To log issues***, click here to go to the [github oracle](https://github.com/OracleMichael/ODA-Alexa-Workshop/issues/new) repository issue submission form.
 

@@ -2,6 +2,8 @@
 
 Updated: October 25th, 2019
 
+This part of the lab builds the backend server to be hosted on Heroku. The backend server uses Node JS and effectively sits between Alexa and Digital Assistant, translating each other's output into input recognized by the other.
+
 ## Objectives
 - Create Heroku account
 - Set up Heroku on local computer

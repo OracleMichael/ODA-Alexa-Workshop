@@ -2,7 +2,7 @@
 
 Updated: October 25th, 2019
 
-Welcome to the **Oracle Public Cloud** ODA-Alexa Integration workshop. This workshop will walk you through the process of creating an integration between an Alexa device and Oracle Digital Assistant to facilitate voice conversations with your digital assistant.
+Welcome to the **Oracle Public Cloud** ODA-Alexa Integration workshop. This workshop will walk you through the process of creating an integration between an Alexa device and Oracle Digital Assistant (ODA) to facilitate voice conversations with your digital assistant.
 
 ## Introduction
 
