@@ -205,5 +205,74 @@ alexa ask pizza king what are my options
 
   ![](images/200heroku/testing2.png)
 
+# Debugging
+
+## This section details the most common errors on testing the integration and how to fix them.
+
+The following list contains known fixes to known errors on testing the integration and is by no means an exhaustive list. These error messages are returned by Alexa in the developer console, Alexa mobile app, or Alexa device (for instance, the echo dot).
+
+### Sorry, the application didn't know what to do with that intent
+
+- The Alexa skill intent name should be the same as the name of the intent around line 129 of `service.js`. If, for instance, the name of the intent on the Alexa skill is **CustomIntent** then line 129 should be
+  `alexa_app.intent("CustomIntent", {},`
+  instead of
+  `alexa_app.intent("CommandBot", {},`
+- `AMAZON.FallbackIntent` is being matched; this requires changing alexa slot type values to the intents or utterances expected by digital assistant.
+  - You can check if `AMAZON.FallbackIntent` is being matched by enabling **Skill I/O** (this should be checked already) on the Alexa test page and scrolling down "JSON Input" to the bottom. Check the "request" key and its associated value, then under request look for "intent" and under intent look for "name" (`request.intent.name`). It should be either `AMAZON.FallbackIntent` or "CommandBot" (or whatever your Alexa skill intent is named).
+  - `AMAZON.FallbackIntent` is matched on Alexa's side only if the NLU interpreter on Alexa cannot categorize the intent for digital assistant as a valid intent on the Alexa skill (in this case, CommandBot), and this is due to that Alexa tries to parse the intent based on the given slot types. By changing the slot type values to the ones recognized by the digital assistant (for example, the names of the intents for the digital assistant skill used), Alexa will correctly link the intent to the CommandBot intent on Alexa.
+- The utterance for CommandBot is not exactly `{command}`, for instance `command` or `order pizza {command}`. This will cause Alexa to parse the intent differently; for the second case, you would need to say "order pizza what are my options" to get "what are my options" passed to the digital assistant. If the utterance is incorrect, the JSON input should show that Alexa has matched the intent to `AMAZON.FallbackIntent` (see above).
+
+### I am unable to reach the requested skill
+
+- Alexa endpoint selection type is not correct. It **must** be the second one ("My development endpoint is a sub-domain...").
+
+### There was a problem with the requested skill's response
+
+- Alexa endpoint URL is not correct.
+- Digital assistant channel is not enabled.
+- Digital assistant channel **platform version** is "1.0 (Simple Model)" instead of "1.1 (Conversation Model)".
+  - It might be the case where 1.0 (Simple Model) does not break the integration. Even so, this guide was built on the assumption that 1.1 (Conversation Model) was used. Some errors that are not addressed in this guide may be due to using the simple model.
+- `service.js` has incorrect secret channel key and/or channel URL. Once you put the correct channel secret and/or channel URL into `service.js`, you will need to run the following commands:
+```
+git add .
+git commit -am "Fixed Channel Secret and Channel URL"
+git push heroku master
+```
+  - You can check the Skill I/O to differentiate this cause from the other aforementioned bugs. If `request.type` is a "SessionEndedRequest", then the channel key and/or channel URL might be incorrect.
+
+### The requested skill did not provide a valid response
+
+- Digital assistant channel `outgoing webhook URI` is incorrect.
+
+### [no response]
+
+- `service.js` has incorrect Alexa skill ID. Once you put the correct Alexa skill ID into `service.js`, you will need to run the following commands:
+```
+git add .
+git commit -am "Fixed Alexa skill ID"
+git push heroku master
+```
+  - You can check to see if the Heroku Node server has run into problems. On your Heroku application page click **More** and **View logs**. Give the logger about a minute to load properly, then try the utterance again. This time, the entire JSON input gets printed to the logger, along with any messages that the Node server generates. Refresh the page to clear most of the logs.
+  - For this particular error, you should see an "Unhandled rejection Error: Invalid applicationId" somewhere in the logger.
+
+### Your session has expired. Please start again.
+
+- Digital assistant web channel session needs to be reset. You can do this by navigating to the digital assistant channel and clicking **Reset Sessions** on the right side.
+
+### [any generic Alexa response]
+
+Examples include "Hmmm... I don't understand" and "Sorry[...]" along with other prompts that are native to Alexa (e.g. when given "order pizza" Alexa will attempt to place an online order).
+- The invocation name might be incorrect. For instance, you may have invoked "alexa ask pizza bot order pizza" when the invocation name is pizza king.
+
+### [any specific response from Alexa]
+
+Essentially, if there are ANY responses that Alexa doesn't seem to be capable of giving you on a normal basis (for instance, if Alexa starts to rattle off database entries), then...
+- The wrong digital assistant skill may have been routed to the channel. This also assumes nothing else is wrong with the integration, as a valid response from a digital assistant skill was observed.
+
+### Welcome to Singlebot.
+
+This is not really an error. This occurs when the user does not provide an intent after the invocation, for instance simply saying "alexa ask pizza bot". The conversation context has not entered the digital assistant dialog flow yet, so you will need to properly invoke the digital assistant by following the proper syntax outlined in **STEP 1**.
+
+
 **This completes the ODA-Alexa Integration Workshop!**
 
