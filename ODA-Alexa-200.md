@@ -1,6 +1,6 @@
 # ODA-Alexa Integration - Heroku Node Server Setup
 
-Updated: October 25th, 2019
+Updated: November 1st, 2019
 
 This part of the lab builds the backend server to be hosted on Heroku. The backend server uses Node JS and effectively sits between Alexa and Digital Assistant, translating each other's output into input recognized by the other.
 
@@ -271,7 +271,7 @@ Essentially, if there are ANY responses that Alexa doesn't seem to be capable of
 
 ### Welcome to Singlebot.
 
-This is not really an error. This occurs when the user does not provide an intent after the invocation, for instance simply saying "alexa ask pizza bot". The conversation context has not entered the digital assistant dialog flow yet, so you will need to properly invoke the digital assistant by following the proper syntax outlined in **STEP 1**.
+This is not really an error. This occurs when the user does not provide an intent after the invocation, for instance simply saying "alexa ask pizza bot". The conversation context has not entered the digital assistant dialog flow yet, so you will need to properly invoke the digital assistant by following the proper syntax outlined in **STEP 1** of the **Test the application** section.
 
 
 **This completes the ODA-Alexa Integration Workshop!**
